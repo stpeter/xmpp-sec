@@ -10,7 +10,7 @@
 <?rfc toc="yes"?>
 <?rfc tocdepth="4"?>
 
-<rfc category="info" docName="draft-saintandre-xmpp-tls-01" ipr="trust200902" updates="6120">
+<rfc category="std" docName="draft-saintandre-xmpp-tls-02" ipr="trust200902" updates="6120">
 
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -30,7 +30,7 @@
         <email>psaintan@cisco.com</email>
       </address>
     </author>
-    <date day="12" month="September" year="2013"/>
+    <date/>
     <abstract>
       <t>This document provides recommendations for the use of Transport Layer Security (TLS) in the Extensible Messaging and Presence Protocol (XMPP).  This document updates RFC 6120.</t>
     </abstract>
@@ -54,7 +54,7 @@
     <section title="Recommendations" anchor="rec">
 
       <section title="Support for TLS" anchor="rec-support">
-        <t>Support for TLS (specifically, the XMPP profile of STARTTLS) is mandatory for XMPP implementations.  If the server to which an XMPP client or peer server connects does not offer a stream feature of &lt;starttls xmlns='urn:ietf:params:xml:ns:xmpp-tls'&gt; as described in <xref target='RFC6120'/>, the initiating entity MUST NOT proceed with the stream negotiation and MUST instead abort the connection attempt.</t>
+        <t>Support for TLS (specifically, the XMPP profile of STARTTLS) is mandatory for XMPP implementations.  If the server to which an XMPP client or peer server connects does not offer a stream feature of &lt;starttls xmlns='urn:ietf:params:xml:ns:xmpp-tls'/&gt; as described in <xref target='RFC6120'/>, the initiating entity MUST NOT proceed with the stream negotiation and MUST instead abort the connection attempt.  Although XMPP servers SHOULD include the &lt;required/&gt; child element to indicate that negotiation of TLS is mandatory, clients and peer servers MUST NOT depend on receiving the &lt;required/&gt; flag.</t>
       </section>
 
       <section title="Protocol Versions" anchor="rec-versions">
@@ -68,22 +68,22 @@
             </t>
             <t>XMPP implementations MUST NOT negotiate SSL version 3.
                <vspace blankLines='1'/>
-               Rationale: If SSLv3 is offered, downgrade attacks are made easier.
+               Rationale: SSLv3 <xref target='RFC6101'/> was an improvement over SSLv2, but did not support strong ciphersuites.
                <vspace blankLines='1'/>
             </t>
-            <t>XMPP implementations MAY negotiate TLS version 1.0 <xref target='RFC2246'/>.
+            <t>XMPP implementations SHOULD NOT negotiate TLS version 1.0 <xref target='RFC2246'/>.
                <vspace blankLines='1'/>
-               Rationale: TLS 1.0 prevents downgrade attacks to SSL, but does not support certain stronger ciphersuites.
+               Rationale: TLS 1.0 (published in 1999) includes a way to downgrade the connection to SSLv3 and does not support more modern, strong ciphersuites.
                <vspace blankLines='1'/>
             </t>
             <t>XMPP implementations MAY negotiate TLS version 1.1 <xref target='RFC4346'/>.
                <vspace blankLines='1'/>
-               Rationale: TLS 1.1 prevents downgrade attacks to SSL, but does not support certain stronger ciphersuites.
+               Rationale: TLS 1.1 (published in 2006) prevents downgrade attacks to SSL, but does not support certain stronger ciphersuites.
                <vspace blankLines='1'/>
             </t>
             <t>XMPP implementations MUST support, and prefer to negotiate, TLS version 1.2 <xref target='RFC5246'/>.
                <vspace blankLines='1'/>
-               Rationale: Several stronger ciphersuites are available only with TLS 1.2.
+               Rationale: Several stronger ciphersuites are available only with TLS 1.2 (published in 2008).
             </t>
           </list>
         </t>
@@ -130,7 +130,7 @@
             </t>
           </list>
         </t>
-        <t>Implementation of the following ciphersuites is RECOMMENDED:</t>
+        <t>Given the foregoing considerations, implementation of the following ciphersuites is RECOMMENDED:</t>
         <t>
           <list style='symbols'>
             <t>TLS_DHE_RSA_WITH_AES_128_GCM_SHA256</t>
@@ -143,7 +143,7 @@
       </section>
 
       <section title="Public Key Length" anchor="rec-keylength">
-        <t>Because Diffie-Hellman keys of 1024 bits are estimated to be roughly equivalent to 80-bit symmetric keys, it is better to use longer keys for the "DH" family of ciphersuites.  Unfortunately, some existing software cannot handle (or cannot easily handle) key lengths greater than 1024 bits.  The most common workaround for these systems is to prefer the "ECDHE" family of ciphersuites instead of the "DH" family, then use longer keys.  Key lengths of at least 2048 bits are RECOMMENDED, since they are estimated to be roughly equivalent to 112-bit symmetric keys and might be sufficient for at least the next ten years..</t>
+        <t>Because Diffie-Hellman keys of 1024 bits are estimated to be roughly equivalent to 80-bit symmetric keys, it is better to use longer keys for the "DH" family of ciphersuites.  Unfortunately, some existing software cannot handle (or cannot easily handle) key lengths greater than 1024 bits.  The most common workaround for these systems is to prefer the "ECDHE" family of ciphersuites instead of the "DH" family, then use longer keys.  Key lengths of at least 2048 bits are RECOMMENDED, since they are estimated to be roughly equivalent to 112-bit symmetric keys and might be sufficient for at least the next 10 years.</t>
         <t>Note: The foregoing recommendations are preliminary and will likely be corrected and enhanced in a future version of this document.</t>
       </section>
 
@@ -152,7 +152,7 @@
       </section>
 
       <section title="Unauthenticated Connections" anchor="rec-unauth">
-        <t>The core XMPP specification <xref target='RFC6120'/> states a preference for the use of TLS for encryption along with SASL <xref target='RFC4422'/> (specifically the SASL EXTERNAL mechanism) for authentication.  In general, it is preferable for a connection to be authenticated, including proper identity checking as defined by the "CertID" specification <xref target='RFC6125'/>.  However, given the pervasiveness of passive eavesdropping, even an unauthenticated connection might be better than an unencrypted connection (this is similar to the "better than nothing security" approach for IPsec <xref target='RFC5386'/>).  In particular, given current deployment challenges for authenticated connections between XMPP servers <xref target='I-D.ietf-xmpp-dna'/>, it might be reasonable for XMPP implementations to accept unauthenticated connections when the Server Dialback protocol <xref target='XEP-0220'/> is used for weak identity verification; this will at least enable encryption of server-to-server connections.  Unauthenticated connections include connections negotiated using anonymous Diffie-Hellman algorithms or using self-signed certificates, among other scenarios.</t>
+        <t>The core XMPP specification <xref target='RFC6120'/> states a preference for the use of TLS for encryption along with SASL <xref target='RFC4422'/> for authentication.  In general, it is preferable for a connection to be authenticated, including proper identity checking as defined by the "CertID" specification <xref target='RFC6125'/>.  However, given the pervasiveness of passive eavesdropping, even an unauthenticated connection might be better than an unencrypted connection (this is similar to the "better than nothing security" approach for IPsec <xref target='RFC5386'/>).  In particular, given current deployment challenges for authenticated connections between XMPP servers <xref target='I-D.ietf-xmpp-dna'/>, it might be reasonable for XMPP server implementations to accept unauthenticated connections when the Server Dialback protocol <xref target='XEP-0220'/> is used for weak identity verification; this will at least enable encryption of server-to-server connections.  Unauthenticated connections include connections negotiated using anonymous Diffie-Hellman algorithms or using self-signed certificates, among other scenarios.</t>
       </section>
 
       <section title="Server Name Indication" anchor="rec-sni">
@@ -160,17 +160,18 @@
       </section>
 
       <section title="Session Resumption" anchor="rec-resume">
-        <t>If TLS session resumption is used (e.g., in concert with the XMPP Stream Management extension <xref target='XEP-0198'/>), care ought to be taken to do so safely. In particular, tickets must be authenticated and encrypted to prevent modification or eavesdropping by an attacker. Details can be found in <xref target='RFC5077'/>.</t>
+        <t>If TLS session resumption is used (e.g., in concert with the XMPP Stream Management extension <xref target='XEP-0198'/>), care ought to be taken to do so safely. In particular, the resumption information (either session IDs <xref target='RFC5246'/> or session tickets <xref target='RFC5077'/>) needs to be authenticated and encrypted to prevent modification or eavesdropping by an attacker.  Use of session IDs <xref target='RFC5246'/> is RECOMMENDED instead of session tickets <xref target='RFC5077'/>, since session tickets require use of a relatively small key size and a relatively weak ciphersuite (AES_128_CBC_SHA256) that does not support forward secrecy.</t>
       </section>
 
       <section title="Compression" anchor="rec-compress">
-        <t>XMPP is not generally subject to attacks based on TLS-layer compression (e.g., the "CRIME" attack), since it is not typically used to communicate static strings of the kind communicated over HTTP (e.g., "cookies").  However, because XMPP also supports an application-layer compression technology <xref target='XEP-0138'/>, implementers might wish to prefer native XMPP compression over TLS compression.</t>
+        <t>XMPP is not generally subject to attacks based on TLS-layer compression (e.g., the "CRIME" attack), since it is not typically used to communicate static strings of the kind communicated over HTTP, such as "cookies" <xref target='RFC6265'/>.  However, because XMPP also supports an application-layer compression technology <xref target='XEP-0138'/>, implementers might wish to prefer XMPP compression over TLS compression.</t>
       </section>
 
       <section title="Human Factors" anchor="rec-user">
-        <t>It is RECOMMENDED that XMPP clients provide ways for end users (and XMPP servers provide ways for administators) to complete the following tasks:</t>
+        <t>It is RECOMMENDED that XMPP clients provide ways for end users (and that XMPP servers provide ways for administators) to complete the following tasks:</t>
         <t>
           <list style='symbols'>
+            <t>Determine if a client-to-server or server-to-server connection is encrypted and authenticated.</t>
             <t>Determine the version of TLS used for a client-to-server or server-to-server connection.</t>
             <t>Inspect the certificate offered by an XMPP server.</t>
             <t>Determine the ciphersuite used to encrypt a connection.</t>
@@ -351,12 +352,12 @@
 <author initials='A' surname='Popov' fullname='Andrey Popov'>
     <organization />
 </author>
-<date month='August' day='21' year='2013' />
+<date month='October' day='5' year='2013' />
 <abstract><t>This document requires that Transport Layer Security (TLS) clients and servers never negotiate the use of RC4 cipher suites when they establish connections.</t></abstract>
 </front>
-<seriesInfo name='Internet-Draft' value='draft-popov-tls-prohibiting-rc4-00' />
+<seriesInfo name='Internet-Draft' value='draft-popov-tls-prohibiting-rc4-01' />
 <format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-popov-tls-prohibiting-rc4-00.txt' />
+        target='http://www.ietf.org/internet-drafts/draft-popov-tls-prohibiting-rc4-01.txt' />
 </reference>
 
 <reference anchor='I-D.sheffer-tls-bcp'>
@@ -365,12 +366,12 @@
 <author initials='Y' surname='Sheffer' fullname='Yaron Sheffer'>
     <organization />
 </author>
-<date month='September' day='9' year='2013' />
+<date month='September' day='20' year='2013' />
 <abstract><t>Over the last few years there have been several serious attacks on TLS, including attacks on its most commonly used ciphers and modes of operation.  This document offers recommendations on securely using the TLS and DTLS protocols, given existing standards and implementations.</t></abstract>
 </front>
-<seriesInfo name='Internet-Draft' value='draft-sheffer-tls-bcp-00' />
+<seriesInfo name='Internet-Draft' value='draft-sheffer-tls-bcp-01' />
 <format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-sheffer-tls-bcp-00.txt' />
+        target='http://www.ietf.org/internet-drafts/draft-sheffer-tls-bcp-01.txt' />
 </reference>
 
 <reference anchor='I-D.trammell-perpass-ppa'>
@@ -489,6 +490,34 @@
 <format type='TXT' octets='55079' target='http://www.rfc-editor.org/rfc/rfc6066.txt' />
 </reference>
 
+<reference anchor='RFC6101'>
+<front>
+<title>The Secure Sockets Layer (SSL) Protocol Version 3.0</title>
+<author initials='A.' surname='Freier' fullname='A. Freier'>
+<organization /></author>
+<author initials='P.' surname='Karlton' fullname='P. Karlton'>
+<organization /></author>
+<author initials='P.' surname='Kocher' fullname='P. Kocher'>
+<organization /></author>
+<date year='2011' month='August' />
+<abstract>
+<t>This document is published as a historical record of the SSL 3.0 protocol. The original Abstract follows.&lt;/t>&lt;t> This document specifies version 3.0 of the Secure Sockets Layer (SSL 3.0) protocol, a security protocol that provides communications privacy over the Internet. The protocol allows client/server applications to communicate in a way that is designed to prevent eavesdropping, tampering, or message forgery. This document defines a Historic Document for the Internet community.</t></abstract></front>
+<seriesInfo name='RFC' value='6101' />
+<format type='TXT' octets='142297' target='http://www.rfc-editor.org/rfc/rfc6101.txt' />
+</reference>
+
+<reference anchor='RFC6265'>
+<front>
+<title>HTTP State Management Mechanism</title>
+<author initials='A.' surname='Barth' fullname='A. Barth'>
+<organization /></author>
+<date year='2011' month='April' />
+<abstract>
+<t>This document defines the HTTP Cookie and Set-Cookie header fields.  These header fields can be used by HTTP servers to store state (called cookies) at HTTP user agents, letting the servers maintain a stateful session over the mostly stateless HTTP protocol.  Although cookies have many historical infelicities that degrade their security and privacy, the Cookie and Set-Cookie header fields are widely used on the Internet.  This document obsoletes RFC 2965. [STANDARDS-TRACK]</t></abstract></front>
+<seriesInfo name='RFC' value='6265' />
+<format type='TXT' octets='79724' target='http://www.rfc-editor.org/rfc/rfc6265.txt' />
+</reference>
+
 <reference anchor="XEP-0138">
   <front>
     <title>Stream Compression</title>
@@ -576,7 +605,7 @@
         <email/>
       </address>
     </author>
-    <date day="21" month="August" year="2012"/>
+    <date day="27" month="September" year="2013"/>
   </front>
   <seriesInfo name="XSF XEP" value="0220"/>
   <format type="HTML" target="http://xmpp.org/extensions/xep-0220.html"/>
