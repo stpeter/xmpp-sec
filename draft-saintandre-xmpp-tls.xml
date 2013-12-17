@@ -10,7 +10,7 @@
 <?rfc toc="yes"?>
 <?rfc tocdepth="4"?>
 
-<rfc category="std" docName="draft-saintandre-xmpp-tls-02" ipr="trust200902" updates="6120">
+<rfc category="std" docName="draft-saintandre-xmpp-tls-03" ipr="trust200902" updates="6120">
 
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -66,9 +66,9 @@
                Rationale: SSLv2 has serious security vulnerabilities <xref target='RFC6176'/>.
                <vspace blankLines='1'/>
             </t>
-            <t>XMPP implementations MUST NOT negotiate SSL version 3.
+            <t>XMPP implementations SHOULD NOT negotiate SSL version 3.
                <vspace blankLines='1'/>
-               Rationale: SSLv3 <xref target='RFC6101'/> was an improvement over SSLv2, but did not support strong ciphersuites.
+               Rationale: SSLv3 <xref target='RFC6101'/> was an improvement over SSLv2 and solved some significant security holes in SSLv2, but did not support strong ciphersuites.
                <vspace blankLines='1'/>
             </t>
             <t>XMPP implementations SHOULD NOT negotiate TLS version 1.0 <xref target='RFC2246'/>.
