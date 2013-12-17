@@ -39,7 +39,7 @@
   <middle>
 
     <section title="Introduction" anchor='intro'>
-      <t>The Extensible Messaging and Presence Protocol (XMPP) <xref target='RFC6120'/> (along with its precursor, the so-called "Jabber protocol") has used Transport Layer Security (TLS) <xref target='RFC5246'/> (along with its precursor, Secure Sockets Layer or SSL) since 1999.  Both <xref target='RFC6120'/> and its predecessor <xref target='RFC3920'/> provided recommendations regarding the use of TLS in XMPP.  Given the evolving threat model on the Internet today (see, for example, <xref target='I-D.trammell-perpass-ppa'/>), it is necessary to provide stronger recommendations (see also <xref target='I-D.sheffer-tls-bcp'/>).  This document updates <xref target='RFC6120'/>.</t>
+      <t>The Extensible Messaging and Presence Protocol (XMPP) <xref target='RFC6120'/> (along with its precursor, the so-called "Jabber protocol") has used Transport Layer Security (TLS) <xref target='RFC5246'/> (along with its precursor, Secure Sockets Layer or SSL) since 1999.  Both <xref target='RFC6120'/> and its predecessor <xref target='RFC3920'/> provided recommendations regarding the use of TLS in XMPP.  In order to address the evolving threat model on the Internet today (see, for example, <xref target='I-D.trammell-perpass-ppa'/>), this document provides stronger recommendations (see also <xref target='I-D.sheffer-tls-bcp'/>).  This document updates <xref target='RFC6120'/>.</t>
     </section>
 
     <section title="Terminology" anchor="terms">
@@ -48,17 +48,18 @@
     </section>
 
     <section title="Discussion Venue" anchor="discuss">
-      <t>The discussion venue for this document is the mailing list of the XMPP Working Group, for which archives and subscription information can be found at <eref target='https://www.ietf.org/mailman/listinfo/xmpp'/>.</t>
+      <t>The discussion venue for this document is the mailing list of the XMPP Working Group, for which archives and subscription information can be found at <eref target='https://www.ietf.org/mailman/listinfo/xmpp'/>.  Discussion might also occur on the mailing list of the UTA Working Group, for which archives and subscription information can be found at <eref target='https://www.ietf.org/mailman/listinfo/uta'/>.</t>
     </section>
 
     <section title="Recommendations" anchor="rec">
 
       <section title="Support for TLS" anchor="rec-support">
-        <t>Support for TLS (specifically, the XMPP profile of STARTTLS) is mandatory for XMPP implementations.  If the server to which an XMPP client or peer server connects does not offer a stream feature of &lt;starttls xmlns='urn:ietf:params:xml:ns:xmpp-tls'/&gt; as described in <xref target='RFC6120'/>, the initiating entity MUST NOT proceed with the stream negotiation and MUST instead abort the connection attempt.  Although XMPP servers SHOULD include the &lt;required/&gt; child element to indicate that negotiation of TLS is mandatory, clients and peer servers MUST NOT depend on receiving the &lt;required/&gt; flag.</t>
+        <t>Support for TLS (specifically, the XMPP profile of STARTTLS) is mandatory for XMPP implementations, as already specified in <xref target='RFC6120'/> and its predecessor <xref target='RFC3920'/>.</t>
+        <t>If the server to which an XMPP client or peer server connects does not offer a stream feature of &lt;starttls xmlns='urn:ietf:params:xml:ns:xmpp-tls'/&gt; (thus indicating that it is an XMPP 1.0 server that supports TLS), the initiating entity MUST NOT proceed with the stream negotiation and MUST instead abort the connection attempt.  Although XMPP servers SHOULD include the &lt;required/&gt; child element to indicate that negotiation of TLS is mandatory, clients and peer servers MUST NOT depend on receiving the &lt;required/&gt; flag in determining whether TLS will be enforced for the stream.</t>
       </section>
 
       <section title="Protocol Versions" anchor="rec-versions">
-        <t>It is important both to stop using old, insecure versions of SSL/TLS and to start using modern, more secure versions. Therefore:</t>
+        <t>It is important both to stop using old, less secure versions of SSL/TLS and to start using modern, more secure versions. Therefore:</t>
         <t>
           <list style='symbols'>
             <t>XMPP implementations MUST NOT negotiate SSL version 2.
@@ -68,69 +69,70 @@
             </t>
             <t>XMPP implementations SHOULD NOT negotiate SSL version 3.
                <vspace blankLines='1'/>
-               Rationale: SSLv3 <xref target='RFC6101'/> was an improvement over SSLv2 and solved some significant security holes in SSLv2, but did not support strong ciphersuites.
+               Rationale: SSLv3 <xref target='RFC6101'/> was an improvement over SSLv2 and plugged some significant security holes, but did not support strong cipher suites.
                <vspace blankLines='1'/>
             </t>
             <t>XMPP implementations SHOULD NOT negotiate TLS version 1.0 <xref target='RFC2246'/>.
                <vspace blankLines='1'/>
-               Rationale: TLS 1.0 (published in 1999) includes a way to downgrade the connection to SSLv3 and does not support more modern, strong ciphersuites.
+               Rationale: TLS 1.0 (published in 1999) includes a way to downgrade the connection to SSLv3 and does not support more modern, strong cipher suites.
                <vspace blankLines='1'/>
             </t>
             <t>XMPP implementations MAY negotiate TLS version 1.1 <xref target='RFC4346'/>.
                <vspace blankLines='1'/>
-               Rationale: TLS 1.1 (published in 2006) prevents downgrade attacks to SSL, but does not support certain stronger ciphersuites.
+               Rationale: TLS 1.1 (published in 2006) prevents downgrade attacks to SSL, but does not support certain stronger cipher suites.
                <vspace blankLines='1'/>
             </t>
             <t>XMPP implementations MUST support, and prefer to negotiate, TLS version 1.2 <xref target='RFC5246'/>.
                <vspace blankLines='1'/>
-               Rationale: Several stronger ciphersuites are available only with TLS 1.2 (published in 2008).
+               Rationale: Several stronger cipher suites are available only with TLS 1.2 (published in 2008).
             </t>
           </list>
         </t>
         <t>As of the date of this writing, the latest version of TLS is 1.2.  When TLS is updated to a newer version, this document will be updated to recommend support for the latest version.  If this document is not updated in a timely manner, it can be assumed that support for the latest version of TLS is recommended.</t>
       </section>
 
-      <section title="Ciphersuites" anchor="rec-cipher">
-        <t>It is important both to stop using old, insecure ciphersuites and to start using modern, more secure ciphersuites. Therefore:</t>
+      <section title="Cipher Suites" anchor="rec-cipher">
+        <t>NOTE: Currently this document provides its own recommendations regarding TLS cipher suites.  However, eventually it will be updated to instead reference <xref target='I-D.sheffer-tls-bcp'/>.</t>
+        <t>It is important both to stop using old, insecure cipher suites and to start using modern, more secure cipher suites. Therefore:</t>
         <t>
           <list style='symbols'>
-            <t>XMPP implementations MUST NOT negotiate the NULL ciphersuites.
+            <t>XMPP implementations MUST NOT negotiate the NULL cipher suites.
                <vspace blankLines='1'/>
-               Rationale: The NULL ciphersuites offer no encryption whatsoever and thus are completely insecure.
-               <vspace blankLines='1'/>
-            </t>
-            <t>XMPP implementations MUST NOT negotiate RC4 ciphersuites 
-               <vspace blankLines='1'/>
-               Rationale: The RC4 stream cipher has a variety of cryptographic weaknesses, documented in <xref target='I-D.popov-tls-prohibiting-rc4'/>.
+               Rationale: The NULL cipher suites offer no encryption whatsoever and thus are completely insecure.
                <vspace blankLines='1'/>
             </t>
-            <t>XMPP implementations MUST NOT negotiate ciphersuites that use so-called "export-level" encryption (including algorithms with 40 bits or 56 bits of security).
+            <t>XMPP implementations MUST NOT negotiate RC4 cipher suites 
                <vspace blankLines='1'/>
-               Rationale: These ciphersuites are deliberately "dumbed down" and are very easy to break.
-               <vspace blankLines='1'/>
-            </t>
-            <t>XMPP implementations MUST NOT negotiate ciphersuites that use algorithms that offer less than 128 bits of security (even if they advertise more bits, such as the 168-bit 3DES ciphersuites).
-               <vspace blankLines='1'/>
-               Rationale: Although these ciphersuites are not actively subject to breakage, their useful life is short enough that stronger ciphersuites are desirable.
+               Rationale: The RC4 stream cipher has a variety of cryptographic weaknesses, as documented in <xref target='I-D.popov-tls-prohibiting-rc4'/>.
                <vspace blankLines='1'/>
             </t>
-            <t>XMPP implementations SHOULD prefer ciphersuites that use algorithms with at least 256 bits of security.
+            <t>XMPP implementations MUST NOT negotiate cipher suites offering only so-called "export-level" encryption (including algorithms with 40 bits or 56 bits of security).
                <vspace blankLines='1'/>
-               Rationale: The useful life of such ciphersuites is probably at least 3-5 years.
+               Rationale: These cipher suites are deliberately "dumbed down" and are very easy to break.
                <vspace blankLines='1'/>
             </t>
-            <t>XMPP implementations MUST support, and SHOULD prefer to negotiate, ciphersuites that offer authentication, such as the "AES-GCM" family.
+            <t>XMPP implementations MUST NOT negotiate cipher suites that use algorithms offering less than 128 bits of security (even if they advertise more bits, such as the 168-bit 3DES cipher suites).
+               <vspace blankLines='1'/>
+               Rationale: Although these cipher suites are not actively subject to breakage, their useful life is short enough that stronger cipher suites are desirable.
+               <vspace blankLines='1'/>
+            </t>
+            <t>XMPP implementations SHOULD prefer cipher suites that use algorithms with at least 256 bits of security.
+               <vspace blankLines='1'/>
+               Rationale: The useful life of such cipher suites is probably at least 3-5 years.
+               <vspace blankLines='1'/>
+            </t>
+            <t>XMPP implementations MUST support, and SHOULD prefer to negotiate, cipher suites offering authentication, such as the "AES-GCM" family.
                <vspace blankLines='1'/>
                Rationale: Authenticated connections are better than unauthenticated connections (although, as explained under <xref target='rec-unauth'/>, unauthenticated connections are better than nothing).
                <vspace blankLines='1'/>
             </t>
-            <t>XMPP implementations MUST support, and SHOULD prefer to negotiate, ciphersuites that offer forward secrecy, such as those in the "EDH", "DHE", and "ECDHE" families.
+            <t>XMPP implementations MUST support, and SHOULD prefer to negotiate, cipher suites offering forward secrecy, such as those in the "EDH", "DHE", and "ECDHE" families.
                <vspace blankLines='1'/>
-               Rationale: Forward secrecy (sometimes called "perfect forward secrecy") prevents the recovery of information that was encrypted with older keys, thus limiting the amount of time during which attack can be successful.
+               Rationale: Forward secrecy (sometimes called "perfect forward secrecy") prevents the recovery of information that was encrypted with older session keys, thus limiting the amount of time during which attacks can be successful.
             </t>
           </list>
         </t>
-        <t>Given the foregoing considerations, implementation of the following ciphersuites is RECOMMENDED:</t>
+        <t>Given the foregoing considerations, implementation of the following cipher suites is RECOMMENDED:</t>
         <t>
           <list style='symbols'>
             <t>TLS_DHE_RSA_WITH_AES_128_GCM_SHA256</t>
@@ -139,11 +141,11 @@
             <t>TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384</t>
           </list>
         </t>
-        <t>Unfortunately, those ciphersuites are supported only in TLS 1.2.  A future version of this document might recommend ciphersuites for earlier versions of TLS.</t>
+        <t>Unfortunately, those cipher suites are supported only in TLS 1.2.  A future version of this document might recommend cipher suites for earlier versions of TLS.</t>
       </section>
 
       <section title="Public Key Length" anchor="rec-keylength">
-        <t>Because Diffie-Hellman keys of 1024 bits are estimated to be roughly equivalent to 80-bit symmetric keys, it is better to use longer keys for the "DH" family of ciphersuites.  Unfortunately, some existing software cannot handle (or cannot easily handle) key lengths greater than 1024 bits.  The most common workaround for these systems is to prefer the "ECDHE" family of ciphersuites instead of the "DH" family, then use longer keys.  Key lengths of at least 2048 bits are RECOMMENDED, since they are estimated to be roughly equivalent to 112-bit symmetric keys and might be sufficient for at least the next 10 years.</t>
+        <t>Because Diffie-Hellman keys of 1024 bits are estimated to be roughly equivalent to 80-bit symmetric keys, it is better to use longer keys for the "DH" family of cipher suites.  Unfortunately, some existing software cannot handle (or cannot easily handle) key lengths greater than 1024 bits.  The most common workaround for these systems is to prefer the "ECDHE" family of cipher suites instead of the "DH" family, then use longer keys.  Key lengths of at least 2048 bits are RECOMMENDED, since they are estimated to be roughly equivalent to 112-bit symmetric keys and might be sufficient for at least the next 10 years.</t>
         <t>Note: The foregoing recommendations are preliminary and will likely be corrected and enhanced in a future version of this document.</t>
       </section>
 
@@ -152,7 +154,7 @@
       </section>
 
       <section title="Unauthenticated Connections" anchor="rec-unauth">
-        <t>The core XMPP specification <xref target='RFC6120'/> states a preference for the use of TLS for encryption along with SASL <xref target='RFC4422'/> for authentication.  In general, it is preferable for a connection to be authenticated, including proper identity checking as defined by the "CertID" specification <xref target='RFC6125'/>.  However, given the pervasiveness of passive eavesdropping, even an unauthenticated connection might be better than an unencrypted connection (this is similar to the "better than nothing security" approach for IPsec <xref target='RFC5386'/>).  In particular, given current deployment challenges for authenticated connections between XMPP servers <xref target='I-D.ietf-xmpp-dna'/>, it might be reasonable for XMPP server implementations to accept unauthenticated connections when the Server Dialback protocol <xref target='XEP-0220'/> is used for weak identity verification; this will at least enable encryption of server-to-server connections.  Unauthenticated connections include connections negotiated using anonymous Diffie-Hellman algorithms or using self-signed certificates, among other scenarios.</t>
+        <t>The core XMPP specification <xref target='RFC6120'/> states a preference for the use of TLS for encryption along with SASL <xref target='RFC4422'/> for authentication.  In general, it is preferable for a connection to be authenticated, including proper identity checking as defined by the "CertID" specification <xref target='RFC6125'/>.  However, given the pervasiveness of passive eavesdropping, even an unauthenticated connection might be better than an unencrypted connection (this is similar to the "better than nothing security" approach for IPsec <xref target='RFC5386'/>).  In particular, given current deployment challenges for authenticated connections between XMPP servers (see <xref target='I-D.ietf-xmpp-dna'/> for details), it might be reasonable for XMPP server implementations to accept unauthenticated connections when the Server Dialback protocol <xref target='XEP-0220'/> is used for weak identity verification; this will at least enable encryption of server-to-server connections.  Unauthenticated connections include connections negotiated using anonymous Diffie-Hellman algorithms or using self-signed certificates, among other scenarios.</t>
       </section>
 
       <section title="Server Name Indication" anchor="rec-sni">
@@ -160,11 +162,12 @@
       </section>
 
       <section title="Session Resumption" anchor="rec-resume">
-        <t>If TLS session resumption is used (e.g., in concert with the XMPP Stream Management extension <xref target='XEP-0198'/>), care ought to be taken to do so safely. In particular, the resumption information (either session IDs <xref target='RFC5246'/> or session tickets <xref target='RFC5077'/>) needs to be authenticated and encrypted to prevent modification or eavesdropping by an attacker.  Use of session IDs <xref target='RFC5246'/> is RECOMMENDED instead of session tickets <xref target='RFC5077'/>, since session tickets require use of a relatively small key size and a relatively weak ciphersuite (AES_128_CBC_SHA256) that does not support forward secrecy.</t>
+        <t>If TLS session resumption is used (e.g., in concert with the XMPP Stream Management extension <xref target='XEP-0198'/>), care ought to be taken to do so safely. In particular, the resumption information (either session IDs <xref target='RFC5246'/> or session tickets <xref target='RFC5077'/>) needs to be authenticated and encrypted to prevent modification or eavesdropping by an attacker.</t>
+        <t>Use of session IDs <xref target='RFC5246'/> is RECOMMENDED instead of session tickets <xref target='RFC5077'/>, since session tickets mandate a relatively small key size and a relatively weak cipher suite (AES_128_CBC_SHA256) that does not support forward secrecy.</t>
       </section>
 
       <section title="Compression" anchor="rec-compress">
-        <t>XMPP is not generally subject to attacks based on TLS-layer compression (e.g., the "CRIME" attack), since it is not typically used to communicate static strings of the kind communicated over HTTP, such as "cookies" <xref target='RFC6265'/>.  However, because XMPP also supports an application-layer compression technology <xref target='XEP-0138'/>, implementers might wish to prefer XMPP compression over TLS compression.</t>
+        <t>XMPP is not generally subject to attacks based on TLS-layer compression (e.g., the "CRIME" attack), since it is not typically used to communicate static strings of the kind communicated over HTTP, such as "cookies" <xref target='RFC6265'/>.  However, because XMPP also supports an application-layer compression technology <xref target='XEP-0138'/>, implementers might wish to prefer XMPP compression over TLS compression in order to avoid any potential security issues with TLS-layer compression.  (See <xref target='I-D.sheffer-tls-bcp'/> for related discussion.)</t>
       </section>
 
       <section title="Human Factors" anchor="rec-user">
@@ -174,7 +177,7 @@
             <t>Determine if a client-to-server or server-to-server connection is encrypted and authenticated.</t>
             <t>Determine the version of TLS used for a client-to-server or server-to-server connection.</t>
             <t>Inspect the certificate offered by an XMPP server.</t>
-            <t>Determine the ciphersuite used to encrypt a connection.</t>
+            <t>Determine the cipher suite used to encrypt a connection.</t>
             <t>Be warned if the certificate changes for a given server.</t>
           </list>
         </t>
@@ -338,12 +341,12 @@
 <author initials='M' surname='Miller' fullname='Matthew Miller'>
     <organization />
 </author>
-<date month='September' day='6' year='2013' />
+<date month='October' day='20' year='2013' />
 <abstract><t>This document improves the security of the Extensible Messaging and Presence Protocol (XMPP) in two ways.  First, it specifies how "prooftypes" can establish a strong association between a domain name and an XML stream.  Second, it describes how to securely delegate a source domain to a derived domain, which is especially important in virtual hosting environments.</t></abstract>
 </front>
-<seriesInfo name='Internet-Draft' value='draft-ietf-xmpp-dna-03' />
+<seriesInfo name='Internet-Draft' value='draft-ietf-xmpp-dna-04' />
 <format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-ietf-xmpp-dna-03.txt' />
+        target='http://www.ietf.org/internet-drafts/draft-ietf-xmpp-dna-04.txt' />
 </reference>
 
 <reference anchor='I-D.popov-tls-prohibiting-rc4'>
@@ -376,16 +379,22 @@
 
 <reference anchor='I-D.trammell-perpass-ppa'>
 <front>
-<title>The Perfect Passive Adversary: A Threat Model for the Evaluation of Protocols under Pervasive Surveillance</title>
+<title>A Threat Model for Pervasive Passive Surveillance</title>
 <author initials='B' surname='Trammell' fullname='Brian Trammell'>
     <organization />
 </author>
-<date month='September' day='4' year='2013' />
-<abstract><t>This document elaborates a threat model for the Perfect Passive Adversary (PPA): an adversary with an interest in eavesdropping that can passively observe network traffic at every layer at every point in the network between the endpoints.  It is intended to demonstrate to protocol designers and implementors the observability and inferability of information and metainformation transported over their respective protocols, to assist in the evaluation of the performance of these protocols and the effectiveness of their protection mechanisms under pervasive passive surveillance.</t></abstract>
+<author initials='D' surname='Borkmann' fullname='Daniel Borkmann'>
+    <organization />
+</author>
+<author initials='C' surname='Huitema' fullname='Christian Huitema'>
+    <organization />
+</author>
+<date month='November' day='13' year='2013' />
+<abstract><t>This document elaborates a threat model for pervasive surveillance. We assume an adversary with an interest in indiscriminate eavesdropping that can passively observe network traffic at every layer at every point in the network between the endpoints.  It is intended to demonstrate to protocol designers and implementors the observability and inferability of information and metainformation transported over their respective protocols, to assist in the evaluation of the performance of these protocols and the effectiveness of their protection mechanisms under pervasive passive surveillance.</t></abstract>
 </front>
-<seriesInfo name='Internet-Draft' value='draft-trammell-perpass-ppa-00' />
+<seriesInfo name='Internet-Draft' value='draft-trammell-perpass-ppa-01' />
 <format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-trammell-perpass-ppa-00.txt' />
+        target='http://www.ietf.org/internet-drafts/draft-trammell-perpass-ppa-01.txt' />
 </reference>
 
 <reference anchor='RFC2246'>
