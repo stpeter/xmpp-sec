@@ -10,16 +10,22 @@
 <?rfc toc="yes"?>
 <?rfc tocdepth="4"?>
 
-<rfc category="std" docName="draft-saintandre-xmpp-tls-04" ipr="trust200902" updates="6120">
+<rfc category="std" docName="draft-saintandre-xmpp-tls-05" ipr="trust200902" updates="6120">
 
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <front>
     <title abbrev="XMPP TLS">Use of Transport Layer Security (TLS) in the Extensible Messaging and Presence Protocol (XMPP)</title>
     <author initials="P." surname="Saint-Andre" fullname="Peter Saint-Andre">
-      <organization/>
+      <organization>&amp;yet</organization>
       <address>
         <email>ietf@stpeter.im</email>
+      </address>
+    </author>
+    <author initials="T." surname="Alkemade" fullname="Thijs Alkemade">
+      <organization/>
+      <address>
+        <email>me@thijsalkema.de</email>
       </address>
     </author>
     <date/>
@@ -51,94 +57,15 @@
       </section>
 
       <section title="Protocol Versions" anchor="rec-versions">
-        <t>It is important both to stop using old, less secure versions of SSL/TLS and to start using modern, more secure versions. Therefore:</t>
-        <t>
-          <list style='symbols'>
-            <t>XMPP implementations MUST NOT negotiate SSL version 2.
-               <vspace blankLines='1'/>
-               Rationale: SSLv2 has serious security vulnerabilities <xref target='RFC6176'/>.
-               <vspace blankLines='1'/>
-            </t>
-            <t>XMPP implementations MAY negotiate SSL version 3.
-               <vspace blankLines='1'/>
-               Rationale: SSLv3 <xref target='RFC6101'/> was an improvement over SSLv2 and plugged some significant security holes, but did not support strong cipher suites.
-               <vspace blankLines='1'/>
-            </t>
-            <t>XMPP implementations MAY negotiate TLS version 1.0 <xref target='RFC2246'/>.
-               <vspace blankLines='1'/>
-               Rationale: TLS 1.0 (published in 1999) includes a way to downgrade the connection to SSLv3 and does not support more modern, strong cipher suites.
-               <vspace blankLines='1'/>
-            </t>
-            <t>XMPP implementations MAY negotiate TLS version 1.1 <xref target='RFC4346'/>.
-               <vspace blankLines='1'/>
-               Rationale: TLS 1.1 (published in 2006) prevents downgrade attacks to SSL, but does not support certain stronger cipher suites.
-               <vspace blankLines='1'/>
-            </t>
-            <t>XMPP implementations MUST support, and prefer to negotiate, TLS version 1.2 <xref target='RFC5246'/>.
-               <vspace blankLines='1'/>
-               Rationale: Several stronger cipher suites are available only with TLS 1.2 (published in 2008).
-            </t>
-          </list>
-        </t>
-        <t>As of the date of this writing, the latest version of TLS is 1.2.  When TLS is updated to a newer version, this document will be updated to recommend support for the latest version.  If this document is not updated in a timely manner, it can be assumed that support for the latest version of TLS is recommended.</t>
+        <t>Implementations MUST follow the recommendations in <xref target='I-D.sheffer-tls-bcp'/>.</t>
       </section>
 
       <section title="Cipher Suites" anchor="rec-cipher">
-        <t>NOTE: Currently this document provides its own recommendations regarding TLS cipher suites.  However, eventually it will be updated to instead reference <xref target='I-D.sheffer-tls-bcp'/>.</t>
-        <t>It is important both to stop using old, insecure cipher suites and to start using modern, more secure cipher suites. Therefore:</t>
-        <t>
-          <list style='symbols'>
-            <t>XMPP implementations MUST NOT negotiate the NULL cipher suites.
-               <vspace blankLines='1'/>
-               Rationale: The NULL cipher suites offer no encryption whatsoever and thus are completely insecure.
-               <vspace blankLines='1'/>
-            </t>
-            <t>XMPP implementations MUST NOT negotiate RC4 cipher suites 
-               <vspace blankLines='1'/>
-               Rationale: The RC4 stream cipher has a variety of cryptographic weaknesses, as documented in <xref target='I-D.popov-tls-prohibiting-rc4'/>.
-               <vspace blankLines='1'/>
-            </t>
-            <t>XMPP implementations MUST NOT negotiate cipher suites offering only so-called "export-level" encryption (including algorithms with 40 bits or 56 bits of security).
-               <vspace blankLines='1'/>
-               Rationale: These cipher suites are deliberately "dumbed down" and are very easy to break.
-               <vspace blankLines='1'/>
-            </t>
-            <t>XMPP implementations MUST NOT negotiate cipher suites that use algorithms offering less than 128 bits of security (even if they advertise more bits, such as the 168-bit 3DES cipher suites).
-               <vspace blankLines='1'/>
-               Rationale: Although these cipher suites are not actively subject to breakage, their useful life is short enough that stronger cipher suites are desirable.
-               <vspace blankLines='1'/>
-            </t>
-            <t>XMPP implementations SHOULD prefer cipher suites that use algorithms with at least 256 bits of security.
-               <vspace blankLines='1'/>
-               Rationale: The useful life of such cipher suites is probably at least 3-5 years.
-               <vspace blankLines='1'/>
-            </t>
-            <t>XMPP implementations MUST support, and SHOULD prefer to negotiate, cipher suites offering authentication, such as the "AES-GCM" family.
-               <vspace blankLines='1'/>
-               Rationale: Authenticated connections are better than unauthenticated connections (although, as explained under <xref target='rec-unauth'/>, unauthenticated connections are better than nothing).
-               <vspace blankLines='1'/>
-            </t>
-            <t>XMPP implementations MUST support, and SHOULD prefer to negotiate, cipher suites offering forward secrecy, such as those in the "EDH", "DHE", and "ECDHE" families.
-               <vspace blankLines='1'/>
-               Rationale: Forward secrecy (sometimes called "perfect forward secrecy") prevents the recovery of information that was encrypted with older session keys, thus limiting the amount of time during which attacks can be successful.
-            </t>
-          </list>
-        </t>
-        <t>Given the foregoing considerations, implementation of the following cipher suites is RECOMMENDED:</t>
-        <t>
-          <list style='symbols'>
-            <t>TLS_DHE_RSA_WITH_AES_128_GCM_SHA256</t>
-            <t>TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256</t>
-            <t>TLS_DHE_RSA_WITH_AES_256_GCM_SHA384</t>
-            <t>TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384</t>
-          </list>
-        </t>
-        <t>Unfortunately, those cipher suites are supported only in TLS 1.2.  A future version of this document might recommend cipher suites for earlier versions of TLS.</t>
+        <t>Implementations MUST follow the recommendations in <xref target='I-D.sheffer-tls-bcp'/>.</t>
       </section>
 
       <section title="Public Key Length" anchor="rec-keylength">
-        <t>Because Diffie-Hellman keys of 1024 bits are estimated to be roughly equivalent to 80-bit symmetric keys, it is better to use longer keys for the "DH" family of cipher suites.  Unfortunately, some existing software cannot handle (or cannot easily handle) key lengths greater than 1024 bits.  The most common workaround for these systems is to prefer the "ECDHE" family of cipher suites instead of the "DH" family, then use longer keys.  Key lengths of at least 2048 bits are RECOMMENDED, since they are estimated to be roughly equivalent to 112-bit symmetric keys and might be sufficient for at least the next 10 years.</t>
-        <t>Note: The foregoing recommendations are preliminary and will likely be corrected and enhanced in a future version of this document.</t>
+        <t>Implementations MUST follow the recommendations in <xref target='I-D.sheffer-tls-bcp'/>.</t>
       </section>
 
       <section title="Certificate Validation" anchor="rec-certs">
@@ -155,7 +82,7 @@
 
       <section title="Session Resumption" anchor="rec-resume">
         <t>If TLS session resumption is used (e.g., in concert with the XMPP Stream Management extension <xref target='XEP-0198'/>), care ought to be taken to do so safely. In particular, the resumption information (either session IDs <xref target='RFC5246'/> or session tickets <xref target='RFC5077'/>) needs to be authenticated and encrypted to prevent modification or eavesdropping by an attacker.</t>
-        <t>Use of session IDs <xref target='RFC5246'/> is RECOMMENDED instead of session tickets <xref target='RFC5077'/>, since session tickets mandate a relatively small key size and a relatively weak cipher suite (AES_128_CBC_SHA256) that does not support forward secrecy.</t>
+        <t>Use of session IDs <xref target='RFC5246'/> is RECOMMENDED instead of session tickets <xref target='RFC5077'/>, since XMPP does not in general use state management technologies such as tickets or "cookies" <xref target='RFC6265'/>.</t>
       </section>
 
       <section title="Compression" anchor="rec-compress">
@@ -308,20 +235,6 @@
 <format type='TXT' octets='136507' target='http://www.rfc-editor.org/rfc/rfc6125.txt' />
 </reference>
 
-<reference anchor='RFC6176'>
-<front>
-<title>Prohibiting Secure Sockets Layer (SSL) Version 2.0</title>
-<author initials='S.' surname='Turner' fullname='S. Turner'>
-<organization /></author>
-<author initials='T.' surname='Polk' fullname='T. Polk'>
-<organization /></author>
-<date year='2011' month='March' />
-<abstract>
-<t>This document requires that when Transport Layer Security (TLS) clients and servers establish connections, they never negotiate the use of Secure Sockets Layer (SSL) version 2.0.  This document updates the backward compatibility sections found in the Transport Layer Security (TLS). [STANDARDS-TRACK]</t></abstract></front>
-<seriesInfo name='RFC' value='6176' />
-<format type='TXT' octets='7642' target='http://www.rfc-editor.org/rfc/rfc6176.txt' />
-</reference>
-
     </references>
 
     <references title="Informative References">
@@ -341,20 +254,6 @@
 <seriesInfo name='Internet-Draft' value='draft-ietf-xmpp-dna-04' />
 <format type='TXT'
         target='http://www.ietf.org/internet-drafts/draft-ietf-xmpp-dna-04.txt' />
-</reference>
-
-<reference anchor='I-D.popov-tls-prohibiting-rc4'>
-<front>
-<title>Prohibiting RC4 Cipher Suites</title>
-<author initials='A' surname='Popov' fullname='Andrey Popov'>
-    <organization />
-</author>
-<date month='October' day='5' year='2013' />
-<abstract><t>This document requires that Transport Layer Security (TLS) clients and servers never negotiate the use of RC4 cipher suites when they establish connections.</t></abstract>
-</front>
-<seriesInfo name='Internet-Draft' value='draft-popov-tls-prohibiting-rc4-01' />
-<format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-popov-tls-prohibiting-rc4-01.txt' />
 </reference>
 
 <reference anchor='I-D.sheffer-tls-bcp'>
@@ -391,24 +290,6 @@
         target='http://www.ietf.org/internet-drafts/draft-trammell-perpass-ppa-01.txt' />
 </reference>
 
-<reference anchor='RFC2246'>
-<front>
-<title>The TLS Protocol Version 1.0</title>
-<author initials='T.' surname='Dierks' fullname='Tim Dierks'>
-<organization>Certicom</organization>
-<address>
-<email>tdierks@certicom.com</email></address></author>
-<author initials='C.' surname='Allen' fullname='Christopher Allen'>
-<organization>Certicom</organization>
-<address>
-<email>callen@certicom.com</email></address></author>
-<date year='1999' month='January' />
-<abstract>
-<t>This document specifies Version 1.0 of the Transport Layer Security (TLS) protocol. The TLS protocol provides communications privacy over the Internet. The protocol allows client/server applications to communicate in a way that is designed to prevent eavesdropping, tampering, or message forgery.</t></abstract></front>
-<seriesInfo name='RFC' value='2246' />
-<format type='TXT' octets='170401' target='http://www.rfc-editor.org/rfc/rfc2246.txt' />
-</reference>
-
 <reference anchor='RFC3920'>
 <front>
 <title abbrev='XMPP Core'>Extensible Messaging and Presence Protocol (XMPP): Core</title>
@@ -437,20 +318,6 @@
 <format type='TXT' octets='194313' target='http://www.rfc-editor.org/rfc/rfc3920.txt' />
 <format type='HTML' octets='281359' target='http://xml.resource.org/public/rfc/html/rfc3920.html' />
 <format type='XML' octets='234610' target='http://xml.resource.org/public/rfc/xml/rfc3920.xml' />
-</reference>
-
-<reference anchor='RFC4346'>
-<front>
-<title>The Transport Layer Security (TLS) Protocol Version 1.1</title>
-<author initials='T.' surname='Dierks' fullname='T. Dierks'>
-<organization /></author>
-<author initials='E.' surname='Rescorla' fullname='E. Rescorla'>
-<organization /></author>
-<date year='2006' month='April' />
-<abstract>
-<t>This document specifies Version 1.1 of the Transport Layer Security (TLS) protocol.  The TLS protocol provides communications security over the Internet.  The protocol allows client/server applications to communicate in a way that is designed to prevent eavesdropping, tampering, or message forgery. [STANDARDS-TRACK]</t></abstract></front>
-<seriesInfo name='RFC' value='4346' />
-<format type='TXT' octets='187041' target='http://www.rfc-editor.org/rfc/rfc4346.txt' />
 </reference>
 
 <reference anchor='RFC4422'>
@@ -491,22 +358,6 @@
 <t>This document provides specifications for existing TLS extensions.  It is a companion document for RFC 5246, "The Transport Layer Security (TLS) Protocol Version 1.2".  The extensions specified are server_name, max_fragment_length, client_certificate_url, trusted_ca_keys, truncated_hmac, and status_request. [STANDARDS-TRACK]</t></abstract></front>
 <seriesInfo name='RFC' value='6066' />
 <format type='TXT' octets='55079' target='http://www.rfc-editor.org/rfc/rfc6066.txt' />
-</reference>
-
-<reference anchor='RFC6101'>
-<front>
-<title>The Secure Sockets Layer (SSL) Protocol Version 3.0</title>
-<author initials='A.' surname='Freier' fullname='A. Freier'>
-<organization /></author>
-<author initials='P.' surname='Karlton' fullname='P. Karlton'>
-<organization /></author>
-<author initials='P.' surname='Kocher' fullname='P. Kocher'>
-<organization /></author>
-<date year='2011' month='August' />
-<abstract>
-<t>This document is published as a historical record of the SSL 3.0 protocol. The original Abstract follows.&lt;/t>&lt;t> This document specifies version 3.0 of the Secure Sockets Layer (SSL 3.0) protocol, a security protocol that provides communications privacy over the Internet. The protocol allows client/server applications to communicate in a way that is designed to prevent eavesdropping, tampering, or message forgery. This document defines a Historic Document for the Internet community.</t></abstract></front>
-<seriesInfo name='RFC' value='6101' />
-<format type='TXT' octets='142297' target='http://www.rfc-editor.org/rfc/rfc6101.txt' />
 </reference>
 
 <reference anchor='RFC6265'>
