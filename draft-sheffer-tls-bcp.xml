@@ -13,7 +13,7 @@
 <!ENTITY rfc6101 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6101.xml">
 <!ENTITY rfc6176 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6176.xml">
 <!ENTITY rfc6460 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6460.xml">
-<!ENTITY I-D.merkle-tls-brainpool PUBLIC "" "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.merkle-tls-brainpool.xml">
+<!ENTITY rfc7027 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7027.xml">
 <!ENTITY I-D.popov-tls-prohibiting-rc4 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.popov-tls-prohibiting-rc4.xml">
 <!ENTITY I-D.popov-tls-prohibiting-rc4 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.sheffer-uta-tls-attacks.xml">
 ]>
@@ -130,13 +130,13 @@
                <vspace blankLines='1'/>
                Rationale: These cipher suites are deliberately "dumbed down" and are very easy to break.
             </t>
-            <t>Implementations MUST NOT negotiate cipher suites that use algorithms offering less than 128 bits of security (even if they advertise more bits, such as the 168-bit 3DES cipher suites).
+            <t>Implementations SHOULD NOT negotiate cipher suites that use algorithms offering less than 128 bits of security (even if they advertise more bits, such as the 168-bit 3DES cipher suites).
                <vspace blankLines='1'/>
                Rationale: Although these cipher suites are not actively subject to breakage, their useful life is short enough that stronger cipher suites are desirable.
             </t>
             <t>Implementations SHOULD prefer cipher suites that use algorithms with at least 128 (and, if possible, 256) bits of security.
                <vspace blankLines='1'/>
-               Rationale: The useful life of such cipher suites is probably at least a few years.
+               Rationale: Although the useful life of such cipher suites is unknown, it is probably at least several years for the 128-bit ciphers and "until the next fundamental technology breakthrough" for 256-bit ciphers.
             </t>
             <t>Implementations MUST support, and SHOULD prefer to negotiate, cipher suites offering forward secrecy, such as those in the "EDH", "DHE", and "ECDHE" families.
                <vspace blankLines='1'/>
@@ -155,7 +155,7 @@
         </t>
         <t>We suggest that TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 be preferred in general.</t>
         <t>Unfortunately, those cipher suites are supported only in TLS 1.2 since they are authenticated encryption (AEAD) algorithms <xref target="RFC5116"/>.  A future version of this document might recommend cipher suites for earlier versions of TLS.</t>
-        <t><xref target="RFC4492"/> allows clients and servers to negotiate ECDH parameters (curves).  Clients and servers SHOULD prefer verifiably random curves (specifically Brainpool P-256, brainpoolp256r1 <xref target="I-D.merkle-tls-brainpool"/>), and fall back to the commonly used NIST P-256 (secp256r1) curve <xref target="RFC4492"/>. In addition, clients SHOULD send an ec_point_formats extension with a single element, “uncompressed”.</t>
+        <t><xref target="RFC4492"/> allows clients and servers to negotiate ECDH parameters (curves).  Clients and servers SHOULD prefer verifiably random curves (specifically Brainpool P-256, brainpoolp256r1 <xref target="RFC7027"/>), and fall back to the commonly used NIST P-256 (secp256r1) curve <xref target="RFC4492"/>. In addition, clients SHOULD send an ec_point_formats extension with a single element, “uncompressed”.</t>
       </section>
 
       <section title="Public Key Length" anchor="rec-keylength">
@@ -248,9 +248,8 @@ PFS is generally achieved by using the Diffie-Hellman scheme to derive session k
 &rfc5246;
 &rfc5288;
 &rfc5289;
-&rfc6101;
 &rfc6176;
-&I-D.merkle-tls-brainpool;
+&rfc7027;
     </references>
 
     <references title="Informative References">
@@ -281,6 +280,7 @@ PFS is generally achieved by using the Diffie-Hellman scheme to derive session k
 &rfc4346;
 &rfc5077;
 &rfc5116;
+&rfc6101;
 &rfc6460;
 
 <reference anchor="CAB-Baseline" target="https://www.cabforum.org/documents.html"><front><title>Baseline Requirements for the Issuance and Management of Publicly-Trusted Certificates Version 1.1.6</title><author fullname="CA/Browser Forum"></author><date year="2013"/></front></reference>
