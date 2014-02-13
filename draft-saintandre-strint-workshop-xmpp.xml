@@ -10,14 +10,14 @@
 <?rfc toc="yes"?>
 <?rfc tocdepth="4"?>
 
-<rfc category="std" docName="draft-saintandre-strint-workshop-xmpp-01" ipr="trust200902">
+<rfc category="std" docName="draft-saintandre-strint-workshop-xmpp-02" ipr="trust200902">
 
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <front>
     <title abbrev="STRINT XMPP">STRINT Workshop Position Paper: Strengthening the Extensible Messaging and Presence Protocol (XMPP)</title>
     <author initials="P." surname="Saint-Andre" fullname="Peter Saint-Andre">
-      <organization>XMPP Standards Foundation</organization>
+      <organization>&amp;yet</organization>
       <address>
         <email>ietf@stpeter.im</email>
       </address>
@@ -36,17 +36,13 @@
   <middle>
 
     <section title="Introduction" anchor='intro'>
-      <t>The Extensible Messaging and Presence Protocol (XMPP) <xref target='RFC6120'/> (along with its precursor, the so-called "Jabber protocol") has been used since 1999 for instant messaging, presence, and other forms of near-real-time communication.</t>
+      <t>The Extensible Messaging and Presence Protocol (XMPP) <xref target='RFC6120'/> (along with its precursor, the so-called "Jabber protocol") has been used since 1999 for instant messaging(IM), presence, and other forms of near-real-time communication.</t>
       <t>XMPP has a distributed client-server architecture, with one hop from a client to a server and one hop between any two servers, for a total of at most three hops on the communication path from a given client to another client.  Although XMPP has supported per-hop channel encryption using Transport Layer Security (TLS) <xref target='RFC5246'/> since 2004 through a STARTTLS upgrade mechanism on the standard XMPP ports (with a hardcoded TLS-only port for the client-to-server hop since 1999), in practice TLS has not been universally deployed for operational reasons.  In the last few months, operators of XMPP services have been working to deploy TLS more widely, and those efforts are summarized in this document.</t>
       <t>Given the client-server architecture of XMPP, per-hop encryption using TLS does not protect messages inside the application servers that are used for routing.  Therefore, various efforts have been made to provide end-to-end object encryption for the payloads of XMPP "stanzas".  To put it mildly, these efforts have been less than completely successful.  This document also summarizes the state of end-to-end encryption for XMPP.</t>
     </section>
 
     <section title="Terminology" anchor="terms">
       <t>Various security-related terms are to be understood in the sense defined in <xref target="RFC4949"/>.</t>
-    </section>
-
-    <section title="Discussion Venue" anchor="discuss">
-      <t>The discussion venue for this document is the PERPASS mailing list, for which archives and subscription information can be found at <eref target='https://www.ietf.org/mailman/listinfo/perpass'/>.</t>
     </section>
 
     <section title="Per-Hop Encryption" anchor="perhop">
@@ -60,9 +56,9 @@
         </list>
       </t>
       <t>The last item deserves some explanation. Many instant messaging clients "hardcode" the connection hosts for multi-tenanted domains. For example, if the XMPP service for example.com is serviced by hosting.example.net (and example.net is a large enough service provider), many IM clients will provide a "wizard" interface that enables the end user to choose "example.net" as a service type or provider when configuring an account. As a result, the client software will hide the security details of the connection to example.com and override identity mismatches of the kind otherwise forbidden by the security considerations of the core XMPP specification <xref target='RFC6120'/> and the "CertID" specification <xref target='RFC6125'/>.  However, because these overrides are not applied on server-to-server streams, many existing implementations and deployments do not even attempt TLS negotiation for server-to-server streams.</t>
-      <t>Although a technology like DANE/DNSSEC (see <xref target='I-D.ietf-dane-srv'/>) or POSH/HTTPS (see <xref target='I-D.miller-posh'/> and <xref target='I-D.ietf-xmpp-dna'/>) would provide means to overcome the operational limitations of authenticated encryption, neither is yet widely deployed. Thus, in practice, when server-to-server streams are being protected often the technology used is unauthenticated encryption via TLS and the XMPP Server Dialback extension <xref target='XEP-0220'/>.</t>
+      <t>Although a technology like DANE/DNSSEC (see <xref target='I-D.ietf-dane-srv'/>) or POSH/HTTPS (see <xref target='I-D.ietf-xmpp-posh'/> and <xref target='I-D.ietf-xmpp-dna'/>) would provide means to overcome the operational limitations of authenticated encryption, neither is yet widely deployed. Thus, in practice, when server-to-server streams are being protected often the technology used is unauthenticated encryption via TLS and the XMPP Server Dialback extension <xref target='XEP-0220'/>.</t>
       <t>In late 2013, a number of service operators in the XMPP community committed to mandating encryption on all hops under their control, and a number of software developers committed to supporting the features needed to make such encryption possible. The goal is to enable such encryption permanently on May 19, 2014. So far, one test day has been held (on January 4, 2014) and another test day will be held (on February 22, 2014) before the date of the STRINT workshop. The test day revealed bugs in several XMPP software implementations and prompted security improvements at a number of deployed services.</t>
-      <t>Also helpful has been the "IM Observatory" site at <eref target='https://xmpp.net'/>.  Most IM clients allow end users to inspect their connection to determine whether it is encrypted or not.  However, users can not easily determine this for the other hops on the path to a user on a different server.  Thus the IM Observatory has multiple goals: to give end users a tool with which they can examine the security of the entire end to end path, to give service operators information about improvements they can make to their servers' security and to give all XMPP developers helpful statistics about the entire network.  </t>
+      <t>Also helpful has been the "IM Observatory" site at <eref target='https://xmpp.net/'/>.  Most IM clients allow end users to inspect their connection to determine whether it is encrypted or not.  However, users cannot easily determine the status of the other hops on the path to a user on a different server.  Thus the IM Observatory has multiple goals: to give end users a tool with which they can examine the security of the entire end-to-end path, to give service operators information about improvements they can make to their servers' security, and to give all XMPP developers helpful statistics about the entire network.</t>
     </section>
 
     <section title="End-to-End Encryption" anchor="e2e">
@@ -151,12 +147,12 @@
 <author initials='P' surname='Saint-Andre' fullname='Peter Saint-Andre'>
     <organization />
 </author>
-<date month='December' day='13' year='2013' />
+<date month='February' day='11' year='2014' />
 <abstract><t> The DANE specification (RFC 6698) describes how to use TLSA resource records in the DNS to associate a server's host name with its TLS certificate.  The association is secured with DNSSEC.  Some application protocols use SRV records (RFC 2782) to indirectly name the server hosts for a service domain (SMTP uses MX records for the same purpose).  This specification gives generic instructions for how these application protocols locate and use TLSA records when technologies such as SRV records are used.  Separate documents give the details that are specific to particular application protocols.</t></abstract>
 </front>
-<seriesInfo name='Internet-Draft' value='draft-ietf-dane-srv-03' />
+<seriesInfo name='Internet-Draft' value='draft-ietf-dane-srv-04' />
 <format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-ietf-dane-srv-03.txt' />
+        target='http://www.ietf.org/internet-drafts/draft-ietf-dane-srv-04.txt' />
 </reference>
 
 <reference anchor='I-D.ietf-xmpp-dna'>
@@ -168,12 +164,12 @@
 <author initials='M' surname='Miller' fullname='Matthew Miller'>
     <organization />
 </author>
-<date month='October' day='20' year='2013' />
+<date month='February' day='4' year='2014' />
 <abstract><t>This document improves the security of the Extensible Messaging and Presence Protocol (XMPP) in two ways.  First, it specifies how "prooftypes" can establish a strong association between a domain name and an XML stream.  Second, it describes how to securely delegate a source domain to a derived domain, which is especially important in virtual hosting environments.</t></abstract>
 </front>
-<seriesInfo name='Internet-Draft' value='draft-ietf-xmpp-dna-04' />
+<seriesInfo name='Internet-Draft' value='draft-ietf-xmpp-dna-05' />
 <format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-ietf-xmpp-dna-04.txt' />
+        target='http://www.ietf.org/internet-drafts/draft-ietf-xmpp-dna-05.txt' />
 </reference>
 
 <reference anchor='I-D.meyer-xmpp-e2e-encryption'>
@@ -194,7 +190,7 @@
         target='http://www.ietf.org/internet-drafts/draft-meyer-xmpp-e2e-encryption-02.txt' />
 </reference>
 
-<reference anchor='I-D.miller-posh'>
+<reference anchor='I-D.ietf-xmpp-posh'>
 <front>
 <title>PKIX over Secure HTTP (POSH)</title>
 <author initials='M' surname='Miller' fullname='Matthew Miller'>
@@ -203,12 +199,12 @@
 <author initials='P' surname='Saint-Andre' fullname='Peter Saint-Andre'>
     <organization />
 </author>
-<date month='November' day='12' year='2013' />
+<date month='February' day='4' year='2014' />
 <abstract><t>Experience has shown that it is extremely difficult to deploy proper PKIX certificates for TLS in multi-tenanted environments, since certification authorities will not issue certificates for hosted domains to hosting services, hosted domains do not want hosting services to hold their private keys, and hosting services wish to avoid liability for holding those keys.  As a result, domains hosted in multi-tenanted environments often deploy non-HTTP applications such as email and instant messaging using certificates that identify the hosting service, not the hosted domain.  Such deployments force end users and peer services to accept a certificate with an improper identifier, resulting in obvious security implications.  This document defines two methods that make it easier to deploy certificates for proper server identity checking in non-HTTP application protocols.  The first method enables the TLS client associated with a user agent or peer application server to obtain the end-entity certificate of a hosted domain over secure HTTP as an alternative to standard PKIX techniques.  The second method enables a hosted domain to securely delegate a non-HTTP application to a hosting service using redirects provided by HTTPS itself or by a pointer in a file served over HTTPS at the hosted domain.  While this approach is developed for use in the Extensible Messaging and Presence Protocol (XMPP) as a Domain Name Association prooftype, it can be applied to any non-HTTP application protocol.</t></abstract>
 </front>
-<seriesInfo name='Internet-Draft' value='draft-miller-posh-03' />
+<seriesInfo name='Internet-Draft' value='draft-ietf-xmpp-posh-00' />
 <format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-miller-posh-03.txt' />
+        target='http://www.ietf.org/internet-drafts/draft-ietf-xmpp-posh-00.txt' />
 </reference>
 
 <reference anchor='I-D.miller-xmpp-e2e'>
