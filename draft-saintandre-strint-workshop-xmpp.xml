@@ -10,7 +10,7 @@
 <?rfc toc="yes"?>
 <?rfc tocdepth="4"?>
 
-<rfc category="std" docName="draft-saintandre-strint-workshop-xmpp-00" ipr="trust200902">
+<rfc category="std" docName="draft-saintandre-strint-workshop-xmpp-01" ipr="trust200902">
 
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -20,6 +20,11 @@
       <organization>XMPP Standards Foundation</organization>
       <address>
         <email>ietf@stpeter.im</email>
+      </address>
+    </author>
+    <author initials="T. P." surname="Alkemade" fullname="Thijs Alkemade">
+      <address>
+        <email>me@thijsalkema.de</email>
       </address>
     </author>
     <date/>
@@ -54,9 +59,10 @@
           <t>Deployment of proper certificates for authenticated encryption is operationally impossible in multi-tenanted environments.</t>
         </list>
       </t>
-      <t>The last item deserves some explanation. Many instant messaging clients "hardcode" the connection hosts for multi-tenanted domains. For example, if the XMPP service for example.com is serviced by hosting.example.net (and example.net is a large enough service provider), many IM clients will provide a "wizard" interface that enables the end user to choose "example.net" as a service type or provider when configuring an account. As a result, the client software will hide the security details of the connection to example.com and override identity mismatches of the kind otherwise forbidden by the security considerations of the core XMPP specification <xref target='RFC6120'/> and the "CertID" specification <xref target='RFC6125'/>.  However, because these overrides are not applied on server-to-server streams, many existing implementations and deployements do not even attempt TLS negotiation for server-to-server streams.</t>
+      <t>The last item deserves some explanation. Many instant messaging clients "hardcode" the connection hosts for multi-tenanted domains. For example, if the XMPP service for example.com is serviced by hosting.example.net (and example.net is a large enough service provider), many IM clients will provide a "wizard" interface that enables the end user to choose "example.net" as a service type or provider when configuring an account. As a result, the client software will hide the security details of the connection to example.com and override identity mismatches of the kind otherwise forbidden by the security considerations of the core XMPP specification <xref target='RFC6120'/> and the "CertID" specification <xref target='RFC6125'/>.  However, because these overrides are not applied on server-to-server streams, many existing implementations and deployments do not even attempt TLS negotiation for server-to-server streams.</t>
       <t>Although a technology like DANE/DNSSEC (see <xref target='I-D.ietf-dane-srv'/>) or POSH/HTTPS (see <xref target='I-D.miller-posh'/> and <xref target='I-D.ietf-xmpp-dna'/>) would provide means to overcome the operational limitations of authenticated encryption, neither is yet widely deployed. Thus, in practice, when server-to-server streams are being protected often the technology used is unauthenticated encryption via TLS and the XMPP Server Dialback extension <xref target='XEP-0220'/>.</t>
-      <t>In late 2013, a number of service operators in the XMPP community committed to mandating encryption on all hops under their control, and a number of software developers committed to supporting the features needed to make such encryption possible. The goal is to enable such encryption permanently on May 19, 2014. So far, one test day has been held (on January 4, 2014) and another test day will be held (on February 22, 2014) before the date of the STRINT workshop. The test day revealed bugs in several XMPP software implementations and prompted security improvements at a number of deployed services. Also helpful has been the "IM Observatory" site at xmpp.net, which enables end users and service administrators to test the security settings of any domain on the public XMPP network.</t>
+      <t>In late 2013, a number of service operators in the XMPP community committed to mandating encryption on all hops under their control, and a number of software developers committed to supporting the features needed to make such encryption possible. The goal is to enable such encryption permanently on May 19, 2014. So far, one test day has been held (on January 4, 2014) and another test day will be held (on February 22, 2014) before the date of the STRINT workshop. The test day revealed bugs in several XMPP software implementations and prompted security improvements at a number of deployed services.</t>
+      <t>Also helpful has been the "IM Observatory" site at <eref target='https://xmpp.net'/>.  Most IM clients allow end users to inspect their connection to determine whether it is encrypted or not.  However, users can not easily determine this for the other hops on the path to a user on a different server.  Thus the IM Observatory has multiple goals: to give end users a tool with which they can examine the security of the entire end to end path, to give service operators information about improvements they can make to their servers' security and to give all XMPP developers helpful statistics about the entire network.  </t>
     </section>
 
     <section title="End-to-End Encryption" anchor="e2e">
