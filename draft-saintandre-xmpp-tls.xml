@@ -248,12 +248,12 @@
 <author initials='M' surname='Miller' fullname='Matthew Miller'>
     <organization />
 </author>
-<date month='October' day='20' year='2013' />
+<date month='February' day='4' year='2014' />
 <abstract><t>This document improves the security of the Extensible Messaging and Presence Protocol (XMPP) in two ways.  First, it specifies how "prooftypes" can establish a strong association between a domain name and an XML stream.  Second, it describes how to securely delegate a source domain to a derived domain, which is especially important in virtual hosting environments.</t></abstract>
 </front>
-<seriesInfo name='Internet-Draft' value='draft-ietf-xmpp-dna-04' />
+<seriesInfo name='Internet-Draft' value='draft-ietf-xmpp-dna-05' />
 <format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-ietf-xmpp-dna-04.txt' />
+        target='http://www.ietf.org/internet-drafts/draft-ietf-xmpp-dna-05.txt' />
 </reference>
 
 <reference anchor='I-D.sheffer-tls-bcp'>
@@ -262,12 +262,18 @@
 <author initials='Y' surname='Sheffer' fullname='Yaron Sheffer'>
     <organization />
 </author>
-<date month='September' day='20' year='2013' />
-<abstract><t>Over the last few years there have been several serious attacks on TLS, including attacks on its most commonly used ciphers and modes of operation.  This document offers recommendations on securely using the TLS and DTLS protocols, given existing standards and implementations.</t></abstract>
+<author initials='R' surname='Holz' fullname='Ralph Holz'>
+    <organization />
+</author>
+<author initials='P' surname='Saint-Andre' fullname='Peter Saint-Andre'>
+    <organization />
+</author>
+<date month='February' day='13' year='2014' />
+<abstract><t>Transport Layer Security (TLS) and Datagram Transport Security Layer (DTLS) are widely used to protect data exchanged over application protocols such as HTTP, SMTP, IMAP, POP, SIP, and XMPP.  Over the last few years, several serious attacks on TLS have emerged, including attacks on its most commonly used cipher suites and modes of operation.  This document provides recommendations for improving the security of both software implementations and deployed services that use TLS and DTLS.</t></abstract>
 </front>
-<seriesInfo name='Internet-Draft' value='draft-sheffer-tls-bcp-01' />
+<seriesInfo name='Internet-Draft' value='draft-sheffer-tls-bcp-02' />
 <format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-sheffer-tls-bcp-01.txt' />
+        target='http://www.ietf.org/internet-drafts/draft-sheffer-tls-bcp-02.txt' />
 </reference>
 
 <reference anchor='I-D.trammell-perpass-ppa'>
