@@ -15,7 +15,7 @@
 <!ENTITY rfc6460 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6460.xml">
 <!ENTITY rfc7027 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7027.xml">
 <!ENTITY I-D.popov-tls-prohibiting-rc4 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.popov-tls-prohibiting-rc4.xml">
-<!ENTITY I-D.popov-tls-prohibiting-rc4 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.sheffer-uta-tls-attacks.xml">
+<!ENTITY I-D.sheffer-uta-tls-attacks PUBLIC "" "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.sheffer-uta-tls-attacks.xml">
 ]>
 
 <?rfc compact="yes"?>
@@ -255,27 +255,7 @@ PFS is generally achieved by using the Diffie-Hellman scheme to derive session k
     <references title="Informative References">
 
 &I-D.popov-tls-prohibiting-rc4;
-
-<reference anchor='I-D.sheffer-uta-tls-attacks'>
-<front>
-<title>Summarizing Current Attacks on TLS and DTLS</title>
-<author initials='Y' surname='Sheffer' fullname='Yaron Sheffer'>
-    <organization />
-</author>
-<author initials='R' surname='Holz' fullname='Ralph Holz'>
-    <organization />
-</author>
-<author initials='P' surname='Saint-Andre' fullname='Peter Saint-Andre'>
-    <organization />
-</author>
-<date month='February' day='7' year='2014' />
-<abstract><t>Over the last few years there have been several serious attacks on TLS, including attacks on its most commonly used ciphers and modes of operation.  This document summarizes these attacks, with the goal of motivating generic and protocol-specific recommendations on the usage of TLS and DTLS.</t></abstract>
-</front>
-<seriesInfo name='Internet-Draft' value='draft-sheffer-uta-tls-attacks-00' />
-<format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-sheffer-uta-tls-attacks-00.txt' />
-</reference>
-
+&I-D.sheffer-uta-tls-attacks;
 &rfc2246;
 &rfc4346;
 &rfc5077;
